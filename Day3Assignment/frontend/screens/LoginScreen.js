@@ -1,4 +1,5 @@
-import { View, Text, StyleSheet, TextInput, Pressable } from "react-native";
+import { useState } from "react";
+import { View, Text, StyleSheet, TextInput, Pressable, Alert } from "react-native";
 
 export default function LoginScreen({ navigation }) {
   return (
@@ -9,21 +10,45 @@ export default function LoginScreen({ navigation }) {
 }
 
 function LoginFormComponent({ navigation }) {
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const validateLogin = () => {
+    if(!username || !password){
+
+      return Alert.alert("Error", "All filelds are required");
+
+    }else{
+      navigation.navigate("Home");
+    }
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome Back</Text>
-      <br /><br />
-      <TextInput placeholder="Username" style={styles.input} placeholderTextColor="#555"/>
+      
+      <TextInput 
+      placeholder="Username" 
+      style={styles.input} 
+      placeholderTextColor="#555"
+      onChangeText={setUsername}
+      />
       <TextInput
         placeholder="Password"
         style={styles.input}
         secureTextEntry
         placeholderTextColor="#555"
+        onChangeText={setPassword}
       />
-      <br />
-      <Pressable style={styles.button} onPress={() => navigation.navigate("Home")}>
+     
+      <Pressable style={styles.button} onPress={validateLogin}>
         <Text style={styles.buttonText}>Login</Text>
       </Pressable>
+
+      <Pressable onPress={() => navigation.navigate("Register")}>
+          <Text style={styles.linkText}>Don’t have an account? Register</Text>
+      </Pressable>
+
     </View>
   );
 }
@@ -52,13 +77,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: "bold",
-    marginBottom: 20,
+    paddingBottom:30,
     color: "#333",
   },
   input: {
     width: "100%",
     padding: 12,
-    marginBottom: 15,
+    marginBottom: 25,
     borderRadius: 10,
     backgroundColor: "#f2f2f2",
     fontSize: 16,
@@ -74,5 +99,11 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
+  },
+    linkText: {
+    color: "#4a90e2",
+    fontSize: 16,
+    marginTop: 25,
+    textDecorationLine: "underline", // makes it look like a link
   },
 });
