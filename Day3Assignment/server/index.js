@@ -1,15 +1,13 @@
 const express = require ("express");
 const envFile = require("dotenv");
 envFile.config();
-
+const { userRouter } = require("./routes/user");
 const app = express();
 app.use(express.json())
 
-app.get('/', function (req,res){
-    res.json({
-        message: "welcome to backend "
-    })
-});
+//set Up Routes
+app.use("/api/v1/user", userRouter);
+
 
 app.listen(process.env.PORT);
 
