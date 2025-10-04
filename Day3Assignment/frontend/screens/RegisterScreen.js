@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, TextInput, Pressable, Alert } from "react-native";
+import axiosInstance from "../services       /axiosInstance";
 
 export default function RegisterScreen({ navigation }){
 
@@ -11,52 +12,83 @@ export default function RegisterScreen({ navigation }){
 }
 
 function RegisterFormComponent({ navigation }){
-    const [username, setUsername] = useState("");
+    const [Email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [firstname, setFirstname] = useState("");
+    const [lastname, setLastname] = useState("");
 
-    const validateRegistration = () => {
-        if (!username || !password ) {
+    const validateRegistration = async () => {
+        if (!Email || !password || !firstname || !lastname ) {  
+          return Alert.alert("Error", "All fields are required");
+        } 
+        try{
+          const res = await axiosInstance.post("/signUp",{
+            Email,
+            password,
+            firstname,
+            lastname,
+          });
+          
+          if(res.data.msg === "User Exists"){
+            return Alert.alert("Error", res.data.msg);
             
-        return Alert.alert("Error", "All fields are required");
-    
-        } else{
-            navigation.navigate("Login");
+          }
+
+          Alert.alert("Success", "User register complete !");
+          navigation.navigate("Login");
+          
+        }catch(e){
+           console.error("Registration error:", e.message);
+            Alert.alert("Error", "Something went wrong. Try again.");
         }
     }
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Register Plz</Text>
            
-            <TextInput 
-            placeholder="Username" 
-            style={styles.input} 
-            placeholderTextColor="#555"
-            onChangeText={setUsername}
-            />
+ <TextInput
+        placeholder="First Name"
+        style={styles.input}
+        placeholderTextColor="#555"
+        onChangeText={setFirstname}
+      />
 
-            <TextInput 
-            placeholder="Password"
-            style={styles.input}
-            secureTextEntry
-            placeholderTextColor={"#555"}
-            onChangeText={setPassword}
-            />
-            
-            <Pressable style={styles.button}
-            onPress={validateRegistration} >
-                <Text style={styles.buttonText}>Register</Text>
-            </Pressable>
+      <TextInput
+        placeholder="Last Name"
+        style={styles.input}
+        placeholderTextColor="#555"
+        onChangeText={setLastname}
+      />
 
-           <Pressable onPress={() => navigation.navigate("Login")}>
-                <Text style={styles.linkText}>Already have an account? Login</Text>
-            </Pressable>
+      <TextInput
+        placeholder="Email"
+        style={styles.input}
+        placeholderTextColor="#555"
+        onChangeText={setEmail}
+      />
+
+      <TextInput
+        placeholder="Password"
+        style={styles.input}
+        secureTextEntry
+        placeholderTextColor="#555"
+        onChangeText={setPassword}
+      />        
+        <Pressable style={styles.button}
+          onPress={validateRegistration} >
+          <Text style={styles.buttonText}>Register</Text>
+        </Pressable>
+
+        <Pressable onPress={() => navigation.navigate("Login")}>
+          <Text style={styles.linkText}>Already have an account? Login</Text>
+        </Pressable>
             
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    flex: {
+  flex: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -64,7 +96,6 @@ const styles = StyleSheet.create({
   },
   container: {
     width: "85%",
-    height: 400,
     padding: 25,
     backgroundColor: "#fff",
     borderRadius: 15,
@@ -74,19 +105,19 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 5 },
     shadowRadius: 10,
-    elevation: 8, // for Android shadow
+    elevation: 8,
   },
   title: {
     fontSize: 26,
     fontWeight: "bold",
     marginBottom: 20,
-    paddingBottom:30,
+    paddingBottom: 30,
     color: "#333",
   },
   input: {
     width: "100%",
     padding: 12,
-    marginBottom: 25,
+    marginBottom: 15,
     borderRadius: 10,
     backgroundColor: "#f2f2f2",
     fontSize: 16,
@@ -97,6 +128,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#4a90e2",
     borderRadius: 10,
     alignItems: "center",
+    marginTop: 10,
   },
   buttonText: {
     color: "#fff",
@@ -107,6 +139,6 @@ const styles = StyleSheet.create({
     color: "#4a90e2",
     fontSize: 16,
     marginTop: 25,
-    textDecorationLine: "underline", // makes it look like a link
+    textDecorationLine: "underline",
   },
 });
