@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, TextInput, Pressable, Alert } from "react-native";
+import loginUser from "../services       /authService";
 
 export default function LoginScreen({ navigation }) {
   return (
@@ -9,29 +10,30 @@ export default function LoginScreen({ navigation }) {
   );
 }
 
-function LoginFormComponent({ navigation }) {
-
-  const [username, setUsername] = useState("");
+ function LoginFormComponent({ navigation }) {
+  const [Email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const validateLogin = () => {
-    if(!username || !password){
-
+   async function validateLogin () {
+    if(!Email || !password){
       return Alert.alert("Error", "All filelds are required");
-
-    }else{
-      navigation.navigate("Home");
     }
+      const res = await loginUser(Email, password);
+      if(res.success){
+         Alert.alert("Success", "Login complete");
+         navigation.navigate("Home");
+      }else{
+        console.log(res.error);
+      }
   }
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome Back</Text>
       
       <TextInput 
-      placeholder="Username" 
+      placeholder="Email" 
       style={styles.input} 
       placeholderTextColor="#555"
-      onChangeText={setUsername}
+      onChangeText={setEmail}
       />
       <TextInput
         placeholder="Password"
