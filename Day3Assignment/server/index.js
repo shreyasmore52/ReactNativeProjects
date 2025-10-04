@@ -1,15 +1,19 @@
-const express = require ("express");
+const express = require("express");
 const envFile = require("dotenv");
 envFile.config();
 const { userRouter } = require("./routes/user");
+const pool = require("./db");
 const app = express();
-app.use(express.json())
+// parse JSON
+app.use(express.json());
 
-//set Up Routes
+// Routes
 app.use("/api/v1/user", userRouter);
 
+app.get("/", function(req,res){
+    res.json({
+        msg: "hello from backend"
+    })
+})
 
-app.listen(process.env.PORT);
-
-
-
+app.listen(3004);
