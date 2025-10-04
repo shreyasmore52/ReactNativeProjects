@@ -1,4 +1,8 @@
 import { View, Text, StyleSheet,Pressable } from "react-native";
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axiosInstance from "../services       /axiosInstance";
+
 
 export default function HomeScreen({ navigation }){
     return <>
@@ -11,16 +15,39 @@ export default function HomeScreen({ navigation }){
 
 }
 
-function ProfileComponent({navigation}){
-    const data = "Shreyas"
-    function logoutScreen(){
+ function ProfileComponent({navigation}){
+    const [user, setUser] = useState(null);
+    useEffect (() => {
+        const fetchUser = async () => {
+        try{
+            const token = await AsyncStorage.getItem("userToken");
+            const res = await axiosInstance.get("/home",{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+         setUser(res.data.user);
+        }catch(e){
+            return res.json({
+                error: "Invalid token: " + e.message 
+            })
+        }
+    };
+
+    fetchUser();  
+}, [])
+
+    async function logoutScreen(){
+        await AsyncStorage.removeItem("userToken");
         navigation.navigate("Login");
+
     }
+
     return (
         <>
         
         <View style={styles.container}>
-            <Text>Hello {data} sir</Text>
+            <Text>{user ? `Hello ${user.firstname} sir 👋` : "Loading user..."}</Text>
         </View>
         <View style={{paddingTop:100}}>
             <Pressable style={styles.button} onPress={logoutScreen}>
