@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, TextInput, Pressable, Alert } from "react-native";
-import loginUser from "../services       /authService";
+import loginUser from "../services/authService";
 
 export default function LoginScreen({ navigation }) {
   return (

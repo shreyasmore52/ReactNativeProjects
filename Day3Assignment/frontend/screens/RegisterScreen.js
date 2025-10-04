@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, TextInput, Pressable, Alert } from "react-native";
-import axiosInstance from "../services       /axiosInstance";
+import axiosInstance from "../services/axiosInstance";
 
 export default function RegisterScreen({ navigation }){
 

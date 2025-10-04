@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet,Pressable } from "react-native";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axiosInstance from "../services       /axiosInstance";
+import axiosInstance from "../services/axiosInstance";
 
 
 export default function HomeScreen({ navigation }){
