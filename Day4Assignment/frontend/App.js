@@ -42,12 +42,7 @@ export default function App(){
                   headerShown: false
                 }}
                 />
-                <Stack.Screen name="Setting"
-                  component={SettingScreen}
-                  options={{
-                    headerShown: false
-                  }}
-                />
+
              
               </Stack.Navigator>
           </NavigationContainer>
