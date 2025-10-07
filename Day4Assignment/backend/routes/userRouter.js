@@ -69,10 +69,14 @@ userRouter.post("/logIn", async function(req,res){
 
 });
 
-userRouter.get("/home", userAuthMiddleware ,async function(req,res){
+userRouter.get("/profile", userAuthMiddleware ,async function(req,res){
     try{
+        console.log("userID",req.userId);
         const data = await pool.query(
             "SELECT firstname FROM users WHERE id=$1", [req.userId]);
+      if (data.rows.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
         res.json({
            msg: "Welcome home!", 
            user: data.rows[0] 
@@ -83,6 +87,7 @@ userRouter.get("/home", userAuthMiddleware ,async function(req,res){
         res.status(500).json({ error: e.message });
     }
 });
+
 
 
 module.exports = {userRouter};
