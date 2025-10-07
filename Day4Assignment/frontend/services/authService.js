@@ -1,4 +1,4 @@
-import axiosInstance  from "./axiosInstance";
+import axiosInstance  from "./axiosUrl";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default async function loginUserCheck(email, password){
