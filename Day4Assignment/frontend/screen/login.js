@@ -3,12 +3,23 @@ import { View , Text, StyleSheet, TextInput, Pressable, Alert, ActivityIndicator
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axiosUrl from "../services/axiosUrl";
 import loginUserCheck from "../services/authService";
+import  SafeAreaWrapper from "../components/safeAreaView";
 
 export default function LogInScreen({ navigation }){
+    return <>
+    <SafeAreaWrapper>
+    <View style={styles.flex}>
+      <TokenCheck navigation={navigation} />
+      <LoginFormComponent navigation={navigation} />
+    </View>
+    </SafeAreaWrapper>  
+    </>
+}
 
-    const [loder, setLoder] = useState(true);
+function TokenCheck({navigation}){
+ const [loder, setLoder] = useState(true);
 
-    useEffect(() =>{
+  useEffect(() =>{
         async function checkToken(){
             try{
                 const token = await AsyncStorage.getItem("userToken");
@@ -26,7 +37,7 @@ export default function LogInScreen({ navigation }){
                     }
                 }
             }catch(e){
-                console.log("Token check failed:", err.message);
+                console.log("Token check failed:", e.message);
             } finally {
                 setLoder(false); // stop loader
             }
@@ -34,7 +45,7 @@ export default function LogInScreen({ navigation }){
         checkToken();
     }, []);
 
-    if(loder){
+        if(loder){
         return <>
         <View style={styles.flex}>
             <ActivityIndicator size="large" color="#304a67ff"/>
@@ -42,13 +53,9 @@ export default function LogInScreen({ navigation }){
         </>
     }
 
-    return <>
-     <View style={styles.flex}>
-      <LoginFormComponent navigation={navigation} />
-    </View>
-    </>
-}
+    return null;
 
+}
 
 function LoginFormComponent({ navigation }) {
   const [email, setemail] = useState("");
@@ -61,8 +68,7 @@ function LoginFormComponent({ navigation }) {
 
     const res = await loginUserCheck(email, password);
     if (res.success) {
-      // 🔹 Save token for next app restart
-      await AsyncStorage.setItem("jwtToken", res.token);
+      await AsyncStorage.setItem("userToken", res.token);
 
       Alert.alert("Success", "Login complete");
       navigation.replace("Home");
@@ -94,7 +100,7 @@ function LoginFormComponent({ navigation }) {
         <Text style={styles.buttonText}>Login</Text>
       </Pressable>
 
-      <Pressable onPress={() => navigation.navigate("Register")}>
+      <Pressable onPress={() => navigation.navigate("SignUp")}>
         <Text style={styles.linkText}>Don’t have an account? Register</Text>
       </Pressable>
     </View>
@@ -106,7 +112,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#f0f4f7",
+    backgroundColor: "#c0c6caff",
   },
   container: {
     width: "85%",
