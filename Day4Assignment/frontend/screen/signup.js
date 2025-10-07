@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, TextInput, Pressable, Alert} from "react-native";
 import axiosUrl from "../services/axiosUrl";
+import  SafeAreaWrapper from "../components/safeAreaView";
 
 export default function RegisterScreen({ navigation }){
     return <>
-        <View style={StyleSheet.flex}>
+        <SafeAreaWrapper>
+         <View style={styles.flex}>
             <SignupComponent navigation={navigation}/>
         </View>
+        </SafeAreaWrapper>
+       
     </>
 }
 
@@ -42,7 +46,7 @@ function SignupComponent({ navigation }){
 
     return <>
         <View style={styles.container}>
-            <Text style={styles.title}>Register Plz</Text>
+            <Text style={styles.title}>Sign Up </Text>
            
             <TextInput
                     placeholder="First Name"
@@ -91,7 +95,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#f0f4f7",
+    backgroundColor: "#c0c6caff",
   },
   container: {
     width: "85%",
